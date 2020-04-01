@@ -1,0 +1,52 @@
+main: biz.yama2211.opengui.Main
+name: OpenGUI
+version: 1.1
+
+commands:
+  enderchest:
+    description: Help Command
+  inventory:
+    description: Help Command
+  workbench:
+    description: Help Command
+  enchanting:
+    description: Help Command
+
+permissions:
+  opengui.enderchest:
+    description: インベントリを開く
+    default: op
+  opengui.enderchest.other:
+    description: 他プレイヤーのインベントリを開く
+    default: op
+  opengui.inventory:
+    description: エンダーチェストを開く
+    default: op
+  opengui.inventory.other:
+    description: 他プレイヤーのエンダーチェストを開く
+    default: op
+  opengui.workbench:
+    description: ワークベンチを開く
+    default: op
+  opengui.enchanting:
+    description: エンチャントテーブルを開く
+    default: op
+    
+  opengui.*:
+    description: 全コマンドの権限
+    default: op
+    children:
+      opengui.enderchest: true
+      opengui.enderchest.other: true
+      opengui.inventory: true
+      opengui.inventory.other: true
+      opengui.workbench: true
+      opengui.enchanting: true
+
+  opengui.other*:
+    description: 他プレイヤーを開く系コマンドの権限
+    default: op
+    children:
+      opengui.enderchest.other: true
+      opengui.inventory.other: true
+    
