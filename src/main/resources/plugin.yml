@@ -1,16 +1,16 @@
 main: biz.yama2211.opengui.Main
 name: OpenGUI
-version: 1.1
+version: 1.2
 
 commands:
   enderchest:
-    description: Help Command
+    description: enderchest
   inventory:
-    description: Help Command
+    description: inventory
   workbench:
-    description: Help Command
+    description: workbench
   enchanting:
-    description: Help Command
+    description: enchanting
 
 permissions:
   opengui.enderchest:
@@ -43,7 +43,7 @@ permissions:
       opengui.workbench: true
       opengui.enchanting: true
 
-  opengui.other*:
+  opengui.other.*:
     description: 他プレイヤーを開く系コマンドの権限
     default: op
     children:

@@ -16,12 +16,16 @@ public void onEnable(){
 }
 
 public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-Player player = (Player)sender;
 
+	if (!(sender instanceof Player)) {
+		sender.sendMessage(ChatColor.RED + "このコマンドはゲーム内から実行してください。");
+	} else {
+		Player player = (Player)sender;
 	//エンダーチェストを開く
 	if (cmd.getName().equalsIgnoreCase("enderchest")) {
 
 		if (args.length == 0) {
+ {
 			if ((sender.hasPermission("opengui.enderchest")) || (sender.isOp())) { //Pex1
 
 			player.openInventory(player.getEnderChest());
@@ -31,6 +35,7 @@ Player player = (Player)sender;
 				sender.sendMessage(ChatColor.RED + "権限がありません。");
 			}
 	}
+		}
 	//(command) <PlayerName> で<PlayerName>のエンダーチェストを開く
 	if (args.length == 1)
 	{
@@ -116,7 +121,8 @@ Player player = (Player)sender;
 		}
 	}
 
-	return false;
-}
 
+}
+return false;
+}
 }
