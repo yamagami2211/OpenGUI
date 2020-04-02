@@ -1,6 +1,6 @@
 main: biz.yama2211.opengui.Main
-name: OpenGUI
-version: 1.2
+name: ${project.artifactId}
+version: ${project.version}
 
 commands:
   enderchest:
@@ -11,6 +11,14 @@ commands:
     description: workbench
   enchanting:
     description: enchanting
+  opengui:
+    description: opengui
+  opengui.en:
+    description: opengui
+  opengui.en.true:
+    description: opengui
+  opengui.en.false:
+    description: opengui
 
 permissions:
   opengui.enderchest:
