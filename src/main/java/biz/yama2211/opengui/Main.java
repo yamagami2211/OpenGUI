@@ -16,11 +16,16 @@ import org.bukkit.material.Dye;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
-	//
+	//起動処理
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(this, this);
 
 	}
+
+	/*
+	 * enchantingコマンド実行時に変化
+	 */
+	private boolean en = false;
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
@@ -114,7 +119,7 @@ public class Main extends JavaPlugin implements Listener {
 			if (cmd.getName().equalsIgnoreCase("enchanting")) {
 
 				if ((sender.hasPermission("opengui.enchanting")) || (sender.isOp())) { //Pex4
-
+					en = true;
 					player.openEnchanting(null, true);
 					sender.sendMessage(ChatColor.GREEN + "エンチャントテーブルを開きました");
 				} //Pex4
@@ -127,9 +132,13 @@ public class Main extends JavaPlugin implements Listener {
 		return false;
 	}//OnCommand
 
+	/*
+	 * enchantingコマンド実行時のみに動作する(はず)。
+	 */
 
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent e) {
+		if (en == true) {
 		if (e.getInventory() instanceof EnchantingInventory) {
 
 					EnchantingInventory inventory = (EnchantingInventory) e.getInventory();
@@ -141,28 +150,39 @@ public class Main extends JavaPlugin implements Listener {
 					itemStack.setAmount(64);
 					inventory.setItem(1, itemStack);
 		}
+		}
 
 	}
 
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent e) {
+		if(en == true) {
 		if (e.getInventory() instanceof EnchantingInventory) {
 			EnchantingInventory inventory = (EnchantingInventory) e.getInventory();
 			Dye dye = new Dye();
 			dye.setColor(DyeColor.BLUE);
 			ItemStack itemStack = dye.toItemStack();
-			
+
 			inventory.remove(itemStack);
+			en = false;
+		}
 		}
 	}
-	
+
+	//e.setCancelled(true);
+
 	@EventHandler
 	public void onClickInventory(InventoryClickEvent e) {
-		if (e.getInventory() instanceof EnchantingInventory) {
-			EnchantingInventory inventory = (EnchantingInventory) e.getInventory();
-			
+		if(en == true) {
+			if(e.getInventory() instanceof EnchantingInventory) {
+				if(e.getInventory().getType() == e.getInventory().getType().ENCHANTING) {
+					if(e.getSlot() == 1) e.setCancelled(true);
+
+				}
+
+			}
 		}
-		
+
 	}
 
 }
