@@ -1,5 +1,7 @@
 package biz.yama2211.opengui;
 
+import java.util.ArrayList;
+
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.command.Command;
@@ -7,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.EnchantingInventory;
@@ -17,9 +18,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
 	//起動処理
+	public ArrayList<EnchantingInventory> inventories;
+
 	public void onEnable() {
 		getServer().getPluginManager().registerEvents(this, this);
-
+		inventories = new ArrayList<EnchantingInventory>();
 	}
 
 	/*
@@ -159,30 +162,12 @@ public class Main extends JavaPlugin implements Listener {
 		if(en == true) {
 		if (e.getInventory() instanceof EnchantingInventory) {
 			EnchantingInventory inventory = (EnchantingInventory) e.getInventory();
-			Dye dye = new Dye();
-			dye.setColor(DyeColor.BLUE);
-			ItemStack itemStack = dye.toItemStack();
-
-			inventory.remove(itemStack);
+			inventory.setItem(1, null);
 			en = false;
 		}
 		}
 	}
 
 	//e.setCancelled(true);
-
-	@EventHandler
-	public void onClickInventory(InventoryClickEvent e) {
-		if(en == true) {
-			if(e.getInventory() instanceof EnchantingInventory) {
-				if(e.getInventory().getType() == e.getInventory().getType().ENCHANTING) {
-					if(e.getSlot() == 1) e.setCancelled(true);
-
-				}
-
-			}
-		}
-
-	}
 
 }
