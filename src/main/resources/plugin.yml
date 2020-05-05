@@ -1,6 +1,8 @@
 main: biz.yama2211.opengui.Main
 name: ${project.artifactId}
 version: ${project.version}
+author: yamagami2211
+website: https://forum.civa.jp/viewtopic.php?f=15&t=368#p1251
 
 commands:
   enderchest:
@@ -39,6 +41,9 @@ permissions:
   opengui.enchanting:
     description: エンチャントテーブルを開く
     default: op
+  opengui.reload:
+    description: Configをリロード
+    default: op
     
   opengui.*:
     description: 全コマンドの権限
@@ -50,6 +55,7 @@ permissions:
       opengui.inventory.other: true
       opengui.workbench: true
       opengui.enchanting: true
+      opengui.reload: true
 
   opengui.other.*:
     description: 他プレイヤーを開く系コマンドの権限
@@ -57,4 +63,3 @@ permissions:
     children:
       opengui.enderchest.other: true
       opengui.inventory.other: true
-    

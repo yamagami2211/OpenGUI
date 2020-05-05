@@ -1,1 +1,25 @@
+# ==================== #
+# OpenGUI Config File  #
+# ==================== #
+
+#enchanting時にラピスラズリを自動配置するか
+#true or false (初期:true)
 lapis: true
+
+#メッセージ関連
+#%prefix : [OpenGUI]が入っています。
+#&<カラーコード> : カラーコードに対応した文字色にします。
+#%player : プレイヤーの名前が入ります。一部項目でのみ使えます。
+message:
+  enderchest:
+    my: "&a%prefix &bエンダーチェストを開きました。"
+    other: "&a%prefix &6%player &bのエンダーチェストを開きました。"
+    offline: "&a%prefix &6%player &4はオフラインです。"
+  inventory:
+    my: "&a%prefix &bインベントリーを開きました。"
+    other: "&a%prefix &6%player &bのインベントリーを開きました。"
+    offline: "&a%prefix &6%player &4はオフラインです。"
+  workbench: "&a%prefix 作業台を開きました。"
+  enchanting: "&a%prefix &bエンダーチェストを開きました"
+  reload: "&a%prefix &bConfigをリロードしました。"
+  nopermission: "&a%prefix &4権限がありません。"
