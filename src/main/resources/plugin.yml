@@ -15,11 +15,7 @@ commands:
     description: enchanting
   opengui:
     description: opengui
-  opengui.en:
-    description: opengui
-  opengui.en.true:
-    description: opengui
-  opengui.en.false:
+  opengui.reload:
     description: opengui
 
 permissions:

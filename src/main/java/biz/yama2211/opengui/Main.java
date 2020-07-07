@@ -4,7 +4,6 @@
 *  WebSite1: https://forum.civa.jp/viewtopic.php?f=15&t=368#p1251
 *  WebSite2: https://mc.yama2211.net/contents/OpenGUI.html
 *  SourceCode: https://github.com/yamagami2211/OpenGUI/
-*
 */
 package biz.yama2211.opengui;
 
@@ -33,38 +32,52 @@ public class Main extends JavaPlugin implements Listener {
 		saveDefaultConfig();
 	}
 
-	/*
-	 * enchantingコマンド実行時に変化
-	 */
+	/* enchantingコマンド実行時に変化 */
 	private boolean en = false;
+	/* 実行時に表示する用のprefix  */
 	private String prefix = "[OpenGUI]";
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		Player player = (Player) sender;
-		if (cmd.getName().equalsIgnoreCase("opengui")) {
-			PluginDescriptionFile yml = getDescription();
-			player.sendMessage(ChatColor.GREEN + "PluginVersion : " +ChatColor.DARK_PURPLE + yml.getVersion());
-			player.sendMessage(ChatColor.AQUA + "/opengui reload" +ChatColor.WHITE + " : Configをリロード");
-			player.sendMessage(ChatColor.AQUA + "/enderchest <PlayerName>" + ChatColor.WHITE + " : 自分<PlayerName>のエンダーチェストを開く");
-			player.sendMessage(ChatColor.AQUA + "/inventory <PlayerName>" + ChatColor.WHITE + " : 自分<PlayerName>のインベントリーを開く");
-			player.sendMessage(ChatColor.AQUA + "/workbench" + ChatColor.WHITE + " : ワークベンチ(作業台)を開く");
-			player.sendMessage(ChatColor.AQUA + "/enchanting" + ChatColor.WHITE + " : エンチャントテーブルを開く");
+		/* ヘルプコマンド */
+		if(args.length == 0) {
+			if (cmd.getName().equalsIgnoreCase("opengui")) {
+				PluginDescriptionFile yml = getDescription();
+				sender.sendMessage(ChatColor.GREEN + "PluginVersion : " + ChatColor.DARK_PURPLE + yml.getVersion());
+				sender.sendMessage(ChatColor.AQUA + "/opengui reload" + ChatColor.WHITE + " : Configをリロード");
+				sender.sendMessage(ChatColor.AQUA + "/enderchest <PlayerName>" + ChatColor.WHITE + " : 自分<PlayerName>のエンダーチェストを開く");
+				sender.sendMessage(ChatColor.AQUA + "/inventory <PlayerName>" + ChatColor.WHITE + " : 自分<PlayerName>のインベントリーを開く");
+				sender.sendMessage(ChatColor.AQUA + "/workbench" + ChatColor.WHITE + " : ワークベンチ(作業台)を開く");
+				sender.sendMessage(ChatColor.AQUA + "/enchanting" + ChatColor.WHITE + " : エンチャントテーブルを開く");
+				return true;
+			}
 		}
 		if (args.length == 1) {
+			/* ConfigReload */
 			if (args[0].equalsIgnoreCase("reload")) {
 				if ((sender.hasPermission("opengui.reload")) || (sender.isOp())) {
-
-					reloadConfig();
 					String Confre = getConfig().getString("message"+ ".reload");
-					Confre = Confre.replaceAll("%prefix",prefix);
+					Confre = Confre.replaceAll("%prefix",Getprefix());
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Confre));
-
+					reloadConfig();
+					return true;
+				}
+				/*Permissionエラー*/
+				else {
+					String NoPex = getConfig().getString("message"+ ".nopermission");
+					NoPex = NoPex.replaceAll("%prefix",Getprefix());
+					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NoPex));
+					return true;
 				}
 			}
 		}
+
 		if (!(sender instanceof Player)) {
-			sender.sendMessage(ChatColor.RED + "このコマンドはゲーム内から実行してください。");
+			String NoPl = getConfig().getString("message"+ ".noplayer");
+			NoPl = NoPl.replaceAll("%prefix",Getprefix());
+			sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NoPl));
+			return true;
 		} else {
+			Player player = (Player) sender;
 
 			//エンダーチェストを開く
 			if (cmd.getName().equalsIgnoreCase("enderchest")) {
@@ -76,13 +89,15 @@ public class Main extends JavaPlugin implements Listener {
 							player.openInventory(player.getEnderChest());
 
 							String EnderOpMy = getConfig().getString("message"+ ".enderchest" + ".my");
-							EnderOpMy = EnderOpMy.replaceAll("%prefix",prefix);
+							EnderOpMy = EnderOpMy.replaceAll("%prefix",Getprefix());
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', EnderOpMy));
+							return true;
 						} //Pex1
 						else {
 							String NoPex = getConfig().getString("message"+ ".nopermission");
-							NoPex = NoPex.replaceAll("%prefix",prefix);
+							NoPex = NoPex.replaceAll("%prefix",Getprefix());
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NoPex));
+							return true;
 						}
 					}
 				}
@@ -95,24 +110,26 @@ public class Main extends JavaPlugin implements Listener {
 							player.openInventory(targetplayer.getEnderChest());
 
 							String EnderOpOth = getConfig().getString("message"+ ".enderchest" + ".other");
-							EnderOpOth = EnderOpOth.replace("%prefix",prefix);
+							EnderOpOth = EnderOpOth.replace("%prefix",Getprefix());
 							EnderOpOth = EnderOpOth.replaceAll("%player",args[0]);
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', EnderOpOth));
-
+							return true;
 
 						} catch (Exception err) {
 							Player targetplayer = player.getServer().getPlayer(args[0]);
 							String EnderOpOff = getConfig().getString("message"+ ".enderchest" + ".offline");
-							EnderOpOff = EnderOpOff.replace("%prefix",prefix);
+							EnderOpOff = EnderOpOff.replace("%prefix",Getprefix());
 							EnderOpOff = EnderOpOff.replaceAll("%player",args[0]);
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', EnderOpOff));
+							return true;
 						}
 
 					} //Pex1.5
 					else {
 						String NoPex = getConfig().getString("message"+ ".nopermission");
-						NoPex = NoPex.replaceAll("%prefix",prefix);
+						NoPex = NoPex.replaceAll("%prefix",Getprefix());
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NoPex));
+						return true;
 					}
 				}
 
@@ -125,14 +142,15 @@ public class Main extends JavaPlugin implements Listener {
 						player.openInventory(player.getInventory());
 
 						String InvOpMy = getConfig().getString("message"+ ".inventory" + ".my");
-						InvOpMy = InvOpMy.replaceAll("%prefix",prefix);
+						InvOpMy = InvOpMy.replaceAll("%prefix",Getprefix());
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', InvOpMy));
-
+						return true;
 					} //pex2
 					else {
 						String NoPex = getConfig().getString("message"+ ".nopermission");
-						NoPex = NoPex.replaceAll("%prefix",prefix);
+						NoPex = NoPex.replaceAll("%prefix",Getprefix());
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NoPex));
+						return true;
 					}
 				}
 				//(command) <PlayerName> で<PlayerName>のインベントリを開く
@@ -144,22 +162,24 @@ public class Main extends JavaPlugin implements Listener {
 							player.openInventory(targetplayer.getInventory());
 
 							String InvOpOth = getConfig().getString("message"+ ".inventory" + ".other");
-							InvOpOth = InvOpOth.replace("%prefix",prefix);
+							InvOpOth = InvOpOth.replace("%prefix",Getprefix());
 							InvOpOth = InvOpOth.replaceAll("%player",args[0]);
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', InvOpOth));
-
+							return true;
 						} catch (Exception err) {
 							Player targetplayer = player.getServer().getPlayer(args[0]);
 							String InvOpOff = getConfig().getString("message"+ ".inventory" + ".offline");
-							InvOpOff = InvOpOff.replace("%prefix",prefix);
+							InvOpOff = InvOpOff.replace("%prefix",Getprefix());
 							InvOpOff = InvOpOff.replaceAll("%player",args[0]);
 							sender.sendMessage(ChatColor.translateAlternateColorCodes('&', InvOpOff));
+							return true;
 						}
 					} //pex2.5
 					else {
 						String NoPex = getConfig().getString("message"+ ".nopermission");
-						NoPex = NoPex.replaceAll("%prefix",prefix);
+						NoPex = NoPex.replaceAll("%prefix",Getprefix());
 						sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NoPex));
+						return true;
 					}
 
 				}
@@ -173,33 +193,37 @@ public class Main extends JavaPlugin implements Listener {
 					player.openWorkbench(null, true);
 
 					String OpWb = getConfig().getString("message"+ ".workbench");
-					OpWb = OpWb.replaceAll("%prefix",prefix);
+					OpWb = OpWb.replaceAll("%prefix",Getprefix());
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', OpWb));
+					return true;
 				} //Pex3
 				else {
 					String NoPex = getConfig().getString("message"+ ".nopermission");
-					NoPex = NoPex.replaceAll("%prefix",prefix);
+					NoPex = NoPex.replaceAll("%prefix",Getprefix());
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NoPex));
+					return true;
 				}
 			}
 			//エンチャントテーブルを開く (ラピスラズリ必須)
 			if (cmd.getName().equalsIgnoreCase("enchanting")) {
 
 				if ((sender.hasPermission("opengui.enchanting")) || (sender.isOp())) { //Pex4
-					en = true;
+					SetEn(true);
 					player.openEnchanting(null, true);
 					String OpEt = getConfig().getString("message"+ ".enchanting");
-					OpEt = OpEt.replaceAll("%prefix",prefix);
+					OpEt = OpEt.replaceAll("%prefix",Getprefix());
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', OpEt));
+					return true;
 				} //Pex4
 				else {
 					String NoPex = getConfig().getString("message"+ ".nopermission");
-					NoPex = NoPex.replaceAll("%prefix",prefix);
+					NoPex = NoPex.replaceAll("%prefix",Getprefix());
 					sender.sendMessage(ChatColor.translateAlternateColorCodes('&', NoPex));
+					return true;
 				}
 			}
 		}
-		return false;
+		return true;
 	}//OnCommand
 
 	/*
@@ -208,7 +232,7 @@ public class Main extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onInventoryOpen(InventoryOpenEvent e) {
-		if (en) {
+		if (GetEn()) {
 
 			if(getConfig().getBoolean("lapis")){
 
@@ -231,12 +255,12 @@ public class Main extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent e) {
-		if(en) {
+		if(GetEn()) {
 			if(getConfig().getBoolean("lapis")) {
 				if (e.getInventory() instanceof EnchantingInventory) {
 					EnchantingInventory inventory = (EnchantingInventory) e.getInventory();
 					inventory.setItem(1, null);
-					en = false;
+					SetEn(false);
 				}
 			}
 		}
@@ -244,7 +268,7 @@ public class Main extends JavaPlugin implements Listener {
 
 	@EventHandler
 	public void onInventoryClick(InventoryClickEvent e) {
-		if(en) {
+		if(GetEn()) {
 			if(getConfig().getBoolean("lapis")){
 			if (e.getInventory() instanceof EnchantingInventory) {
 				//	if(this.inventories.contains((EnchantingInventory) e.getInventory())) {
@@ -258,5 +282,20 @@ public class Main extends JavaPlugin implements Listener {
 
 		}
 
+	}
+
+	//en のセッター
+	public void SetEn(boolean SetEn){
+		en = SetEn;
+	}
+
+	//en のゲッター
+	public boolean GetEn(){
+		return en;
+	}
+
+	//prefix のゲッター
+	public String Getprefix(){
+		return prefix;
 	}
 }

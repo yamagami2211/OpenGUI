@@ -23,3 +23,5 @@ message:
   enchanting: "&a%prefix &bエンダーチェストを開きました"
   reload: "&a%prefix &bConfigをリロードしました。"
   nopermission: "&a%prefix &4権限がありません。"
+  noplayer: "&a%prefix &4コンソールからは実行できません。"
+  configver: "&a%prefix &bConfigの更新があります。Configが古い場合、正常に動作しない場合があります。"
