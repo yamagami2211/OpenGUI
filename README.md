@@ -1,2 +1,5 @@
-# OpenGUI
-https://forum.civa.jp/viewtopic.php?f=15&amp;t=368&amp;p=1251#p1251
+個人リポジトリから移動しました。  
+https://github.com/plugin-yamagami2211/OpenGUI
+
+やまがみ製のSpigotPlugin  
+https://github.com/plugin-yamagami2211
